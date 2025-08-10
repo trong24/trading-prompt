@@ -1,0 +1,65 @@
+name: Validate Trading Sessions
+
+on:
+  push:
+    paths:
+      - "schemas/**"
+      - "scripts/validate_sessions.py"
+      - "sessions/**"
+      - "examples/**"
+      - ".github/workflows/validate-sessions.yml"
+  pull_request:
+    paths:
+      - "schemas/**"
+      - "scripts/validate_sessions.py"
+      - "sessions/**"
+      - "examples/**"
+      - ".github/workflows/validate-sessions.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema
+
+      - name: Run validator (strict)
+        id: run-validator
+        run: |
+          set -euo pipefail
+          python scripts/validate_sessions.py --include-examples --strict | tee validator.out
+
+      - name: Add validator output to job summary
+        if: always()
+        run: |
+          {
+            echo "### Validator output"
+            echo
+            echo '```'
+            cat validator.out || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload validator log artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validator-output
+          path: validator.out

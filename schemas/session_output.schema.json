@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://trading-prompt/schemas/session_output.schema.json",
+  "title": "Trading Session Output (Ground Truth)",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["side", "entry", "stop", "size", "risk_pct"],
+  "properties": {
+    "side":  { "type": "string", "enum": ["long", "short"] },
+    "entry": { "type": "number" },
+    "stop":  { "type": "number" },
+    "size":  { "type": "number", "minimum": 0 },
+    "risk_pct": { "type": "number", "minimum": 0, "maximum": 5 },
+
+    "targets": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 1
+    },
+
+    "plan": {
+      "type": "object",
+      "properties": {
+        "r_min": { "type": "number" },
+        "management": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+
+    "management_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "exit": {
+      "type": "object",
+      "properties": {
+        "time":   { "type": "string", "format": "date-time" },
+        "price":  { "type": "number" },
+        "reason": { "type": "string", "enum": ["tp", "sl", "trail", "thesis_invalidated", "manual_exit"] }
+      },
+      "additionalProperties": true
+    },
+
+    "realized_r": { "type": "number" },
+    "comments":   { "type": "string" }
+  }
+}

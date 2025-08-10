@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://trading-prompt/schemas/session_input.schema.json",
+  "title": "Trading Session Input",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["session", "account", "market", "levels", "signals", "nav_usdt"],
+  "properties": {
+    "session": {
+      "type": "object",
+      "required": ["date", "tz", "mode"],
+      "additionalProperties": true,
+      "properties": {
+        "date": { "type": "string", "format": "date" },
+        "tz": { "type": "string", "pattern": "^[+-]\\d{2}:\\d{2}$" },
+        "mode": { "type": "string", "enum": ["scan", "review", "live"] }
+      }
+    },
+    "account": {
+      "type": "object",
+      "required": ["venue", "instrument", "type"],
+      "additionalProperties": true,
+      "properties": {
+        "venue": { "type": "string", "const": "OKX" },
+        "instrument": { "type": "string", "const": "BTCUSDT.P" },
+        "type": { "type": "string", "const": "perp" },
+        "leverage": { "type": "number", "minimum": 0 },
+        "margin_mode": { "type": "string", "enum": ["cross", "isolated"] }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "max_new_trades": { "type": "integer", "minimum": 0 },
+        "skip_if_news_risk": { "type": "boolean" }
+      }
+    },
+    "market": {
+      "type": "object",
+      "required": ["btc_brief"],
+      "additionalProperties": true,
+      "properties": {
+        "btc_brief": { "type": "string" },
+        "volatility": { "type": "string" },
+        "funding_open_interest": { "type": "string" },
+        "calendar": { "type": "string" }
+      }
+    },
+    "levels": {
+      "type": "object",
+      "required": ["support", "resistance"],
+      "properties": {
+        "support": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "number" },
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "label": { "type": "string" },
+                  "price": { "type": "number" }
+                }
+              }
+            ]
+          }
+        },
+        "resistance": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "number" },
+              {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "label": { "type": "string" },
+                  "price": { "type": "number" }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "signals": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          { "type": "number" },
+          { "type": "string" },
+          { "type": "object" }
+        ]
+      },
+      "properties": {
+        "ma": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "rsi_14": { "type": "number", "minimum": 0, "maximum": 100 },
+        "atr": { "type": "number", "minimum": 0 },
+        "volume": { "type": "string" },
+        "structure": { "type": "string" }
+      }
+    },
+    "notes": { "type": "string" },
+    "positions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["side", "avg_price", "qty", "stop"],
+        "additionalProperties": true,
+        "properties": {
+          "side": { "type": "string", "enum": ["long", "short"] },
+          "avg_price": { "type": "number" },
+          "qty": { "type": "number", "minimum": 0 },
+          "stop": { "type": "number" },
+          "thesis": { "type": "string" }
+        }
+      }
+    },
+    "nav_usdt": { "type": "number", "exclusiveMinimum": 0 },
+
+    "setup": {
+      "type": "string",
+      "enum": ["pullback_ema20", "breakout_key", "rsi_ma9_wma45"]
+    },
+    "mtf_bias": { "type": "string", "enum": ["bull", "bear", "mixed"] },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "screenshots": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "tradingview_link": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}

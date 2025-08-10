@@ -1,0 +1,25 @@
+{
+  "session": { "date": "2025-08-10", "tz": "+07:00", "mode": "review" },
+  "account": { "venue": "OKX", "instrument": "BTCUSDT.P", "type": "perp", "leverage": 2, "margin_mode": "cross" },
+  "constraints": { "max_new_trades": 1, "skip_if_news_risk": true },
+  "market": {
+    "btc_brief": "H4 uptrend; H1 pullback nhẹ",
+    "volatility": "moderate",
+    "funding_open_interest": "neutral",
+    "calendar": "No tier-1 US data next 4h"
+  },
+  "levels": { "support": [58000, 57500], "resistance": [60000, 60500] },
+  "signals": {
+    "ma": { "20": "up", "50": "up", "200": "up" },
+    "rsi_14": 55,
+    "atr": 1200,
+    "volume": "above_avg",
+    "structure": "HH/HL H4; H1 pullback"
+  },
+  "notes": "example for validator",
+  "positions": [],
+  "nav_usdt": 10000,
+  "setup": "rsi_ma9_wma45",
+  "mtf_bias": "bull",
+  "artifacts": { "screenshots": [], "tradingview_link": "" }
+}

@@ -1,0 +1,13 @@
+{
+  "side": "long",
+  "entry": 59000,
+  "stop": 58400,
+  "size": 0.5,
+  "risk_pct": 1.0,
+  "targets": [60200, 60400],
+  "plan": { "r_min": 2.0, "management": "BE at 1R; trail by EMA20 H1" },
+  "management_actions": ["move_stop_BE_at_1R", "partial_50_at_1R"],
+  "exit": { "time": "2025-08-10T13:00:00+07:00", "price": 60400, "reason": "tp" },
+  "realized_r": 2.33,
+  "comments": "example pass file"
+}

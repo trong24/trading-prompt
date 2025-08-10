@@ -1,0 +1,63 @@
+//@version=5
+indicator("RSI with SMA9 & WMA45 (with alerts)", overlay=false, timeframe="", timeframe_gaps=true)
+
+// Inputs
+rsiLen  = input.int(14, "RSI Length", minval=2)
+smaLen  = input.int(9,  "SMA on RSI", minval=2)
+wmaLen  = input.int(45, "WMA on RSI", minval=2)
+ob      = input.float(70.0, "Overbought", step=0.1)
+os      = input.float(30.0, "Oversold",   step=0.1)
+mid1    = input.float(40.0, "Midline 1 (range rule)", step=0.1)
+mid2    = input.float(60.0, "Midline 2 (range rule)", step=0.1)
+emaLen  = input.int(50, "EMA (price filter)", minval=2)
+emaLen2 = input.int(200, "EMA2 (price filter)", minval=2)
+usePriceFilter = input.bool(true, "Use price EMA filter")
+
+// Core
+rsi = ta.rsi(close, rsiLen)
+rsiSma = ta.sma(rsi, smaLen)
+rsiWma = ta.wma(rsi, wmaLen)
+
+// Price filter (for reference)
+ema1 = ta.ema(close, emaLen)
+ema2 = ta.ema(close, emaLen2)
+priceLongBias  = close > ema1 and close > ema2
+priceShortBias = close < ema1 and close < ema2
+
+// Bias (RSI)
+wmaSlope = rsiWma - rsiWma[1]
+rsiLongBias  = rsiSma > rsiWma and wmaSlope > 0
+rsiShortBias = rsiSma < rsiWma and wmaSlope < 0
+
+longBias  = rsiLongBias  and (not usePriceFilter or priceLongBias)
+shortBias = rsiShortBias and (not usePriceFilter or priceShortBias)
+
+// Triggers
+longTrig  = longBias  and ta.crossover(rsi, rsiSma) and rsi >= mid1 and rsi <= 55
+shortTrig = shortBias and ta.crossunder(rsi, rsiSma) and rsi <= mid2 and rsi >= 45
+
+// Plots
+plot(rsi, "RSI", linewidth=2)
+plot(rsiSma, "SMA " + str.tostring(smaLen) + " on RSI", linewidth=2)
+plot(rsiWma, "WMA " + str.tostring(wmaLen) + " on RSI", linewidth=2)
+
+h_ob  = hline(ob,  "OB", color=color.new(color.red, 50))
+h_os  = hline(os,  "OS", color=color.new(color.aqua, 50))
+h_m1  = hline(mid1,"40", color=color.new(color.gray, 70))
+h_m2  = hline(mid2,"60", color=color.new(color.gray, 70))
+fill(h_m1, h_m2, color=color.new(color.gray, 92))
+
+plotshape(longTrig,  title="Long Trigger",  style=shape.triangleup,   location=location.bottom, color=color.new(color.lime, 0), size=size.tiny, text="L")
+plotshape(shortTrig, title="Short Trigger", style=shape.triangledown, location=location.top,    color=color.new(color.red, 0),  size=size.tiny, text="S")
+
+// Alerts
+alertcondition(longTrig,  title="RSI MA9/WMA45 Long",  message="Long trigger (RSI→SMA9 up, regime OK).")
+alertcondition(shortTrig, title="RSI MA9/WMA45 Short", message="Short trigger (RSI→SMA9 down, regime OK).")
+
+// Table HUD
+var tbl = table.new(position.top_right, 1, 4)
+if barstate.islast
+    table.cell(tbl, 0, 0, "Bias (RSI): " + (rsiLongBias ? "LONG" : rsiShortBias ? "SHORT" : "NEUTRAL"))
+    table.cell(tbl, 0, 1, "Bias (Price): " + (priceLongBias ? "LONG" : priceShortBias ? "SHORT" : "NEUTRAL"))
+    table.cell(tbl, 0, 2, "WMA slope: " + str.tostring(wmaSlope, format.mintick))
+    table.cell(tbl, 0, 3, "RSI: " + str.tostring(rsi, format.mintick))
