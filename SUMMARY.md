@@ -1,6 +1,6 @@
 # Summary
 
-- [Readme](Readme.md)
+- [README](README.md)
 
 ## Datasets
 - [Train set](datasets/train.jsonl)
