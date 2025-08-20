@@ -13,9 +13,15 @@ btc-trading-training/
 │   ├── risk_management_guidelines.md
 │   └── journaling_prompts.md
 ├── modules/                     # Modular rules/patterns used in daily analysis
-│   ├── module01_fundamentals.md
-│   ├── module02_patterns.md
-│   └── module20_review.md
+│   ├── module00_mindset_psychology.md
+│   ├── module01_risk_and_btc.md
+│   ├── module02_signal_and_execution.md
+│   ├── module03_mtf.md
+│   ├── module04a_rsi_co_ban.md
+│   ├── module04b_quan_tinh_rsi.md
+│   ├── module04c_mtf_method.md
+│   ├── module04d_case_studies.md
+│   └── module05_rsi_ma9_wma45_system.md
 ├── sessions/                    # Ground-truth session logs (INPUT/OUTPUT pairs)
 │   └── YYYY/MM/...
 ├── examples/                    # Small pedagogical examples (optional)
