@@ -9,7 +9,7 @@ profile:
 asset_strategy:
   default: BTCUSDT
   allow_alt_when:
-    btc_state: sideway
+    btc_state: sideways
     alt_trend: strong
     liquidity: adequate
   leverage_alt_factor_max: 0.5
@@ -75,7 +75,7 @@ checklist:
   - no_crowd_influence
   - no_fomo_or_goal_chasing
 
-sideway_behavior:
+sideways_behavior:
   prefer_no_trade: true
   detect: ["MA20≈MA50 flat (1h)","ATR contraction","ADX<20"]
 
@@ -156,7 +156,7 @@ analysis:
       buy: "HTF RSI > both MAs and >50; Entry TF completes Phase2→Phase3 up"
       sell: "HTF RSI < both MAs and <50; Entry TF completes Phase2→Phase3 down"
     no_trade:
-      - "HTF RSI in 40–60 range (sideway)"
+      - "HTF RSI in 40–60 range (sideways)"
       - "Frames not aligned (mixed signals)"
       - "Entry TF Phase2 dips <40 for longs (or >60 for shorts)"
 
