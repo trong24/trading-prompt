@@ -38,7 +38,8 @@ def enforce_okx_only(inp: dict) -> List[str]:
     errs = []
     acct = inp.get("account")
     if not isinstance(acct, dict):
-        acct = {}
+        errs.append("[input] account must be an object")
+        return errs
     if acct.get("venue") != OKX_VENUE:
         errs.append(f"[input] account.venue must be '{OKX_VENUE}'")
     if acct.get("instrument") != OKX_INSTRUMENT:
