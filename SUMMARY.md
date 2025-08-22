@@ -26,6 +26,7 @@
 - [Module 04c — Phương pháp MTF](modules/module04c_mtf_method.md)
 - [Module 04d — Case studies](modules/module04d_case_studies.md)
 - [Module 05 — Hệ thống RSI + MA9/WMA45](modules/module05_rsi_ma9_wma45_system.md)  <!-- NEW -->
+- [Module 04e — RSI, Quán Tính & Đồng Thuận Đa Khung](modules/module04e_rsi_momentum_multiframe.md)  <!-- NEW -->
 
 ## Templates
 - [Master system prompt](templates/master_system_prompt.md)
